@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.simpleweatherapp.ui.CurrentWeatherViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.CurrentWeather">
+
+        <LinearLayout
+            android:id="@+id/ll_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_city"
+                android:text="@{viewModel.response.name}"
+                android:textSize="24dp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:id="@+id/image_icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                imageIcon="@{viewModel.response.weather.get(0).icon}" />
+
+            <TextView
+                android:id="@+id/tv_temp"
+                android:textSize="36dp"
+                android:text='@{Double.toString(viewModel.response.main.temp) + "*C"}'
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:text="@{viewModel.response.weather.get(0).description}"
+                android:textSize="20dp"
+                android:textStyle="italic"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_temp_feels_like"
+                android:text= '@{"Feels like: " + viewModel.response.main.feels_like + "*C"}'
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_humidity"
+                android:text='@{"Humidity: " + viewModel.response.main.humidity + "%"}'
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_pressure"
+                android:text='@{"Pressure: "+ viewModel.response.main.pressure + "hPa"}'
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>
