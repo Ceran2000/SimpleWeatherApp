@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +30,10 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
 
     private lateinit var viewModel: CurrentWeatherViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var geocoder: Geocoder
     private val PERMISSION_ID = 44
+
+    //TODO: button do lokalizacji, design, ładowanie
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,6 +55,8 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         getLastLocation()
 
+        geocoder = Geocoder(context)
+
 
         return binding.root
     }
@@ -65,8 +71,10 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
                         Log.i("LOCATION:", "IS NULL")
                         requestNewLocationData()
                     } else {
-                        Log.i("LOCATION:", location.toString())
-                        //TODO: tutaj jest lokacja
+                        geocoder.getFromLocation(location.latitude, location.longitude, 1)?.let {
+                            Log.i("LOCATION:", it[0].locality)
+                            viewModel.place.postValue(it[0].locality)
+                        }
                     }
                 }
             } else {
@@ -119,8 +127,10 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val lastLocation: Location = locationResult.lastLocation
-            Log.i("LAST LOCATION:", lastLocation.toString())
-            //TODO: tutaj jest lokacja
+            geocoder.getFromLocation(lastLocation.latitude, lastLocation.longitude, 1)?.let {
+                Log.i("LOCATION:", it[0].locality)
+                viewModel.place.postValue(it[0].locality)
+            }
         }
     }
 
