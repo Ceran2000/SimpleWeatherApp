@@ -11,7 +11,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.CurrentWeather">
+        tools:context=".ui.CurrentWeatherFragment">
 
         <LinearLayout
             android:id="@+id/ll_description"
@@ -80,5 +80,19 @@
 
         </LinearLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/findPlaceFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:elevation="5dp"
+            android:src="@android:drawable/ic_menu_share"
+            android:focusable="true"
+            android:contentDescription="@string/find_place" />
+
     </FrameLayout>
+
+
 </layout>

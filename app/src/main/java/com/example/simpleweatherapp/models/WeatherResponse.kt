@@ -1,5 +1,10 @@
 package com.example.simpleweatherapp.models
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+
 data class WeatherResponse(
     val base: String,
     val clouds: Clouds,
@@ -13,5 +18,5 @@ data class WeatherResponse(
     val timezone: Int,
     val visibility: Int,
     val weather: List<Weather>,
-    val wind: Wind
+    val wind: Wind?
 )

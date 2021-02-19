@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SimpleWeatherApp</string>
+    <string name="find_place">Find place</string>
 </resources>

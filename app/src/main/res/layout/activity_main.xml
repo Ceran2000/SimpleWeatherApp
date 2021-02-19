@@ -7,18 +7,20 @@
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <fragment
             android:id="@+id/current_weather_fragment"
-            android:name="com.example.simpleweatherapp.ui.CurrentWeather"
+            android:name="com.example.simpleweatherapp.ui.CurrentWeatherFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true" />
 
-    </LinearLayout>
+    </RelativeLayout>
+
+
 
 
 </layout>
