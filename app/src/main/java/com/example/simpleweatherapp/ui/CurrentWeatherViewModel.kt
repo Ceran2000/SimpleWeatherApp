@@ -7,6 +7,7 @@ import com.example.simpleweatherapp.models.WeatherResponse
 import com.example.simpleweatherapp.network.WeatherApiService
 import kotlinx.coroutines.launch
 
+enum class WeatherApiStatus { LOADING, ERROR, DONE }
 
 class CurrentWeatherViewModel() : ViewModel() {
 
@@ -14,7 +15,12 @@ class CurrentWeatherViewModel() : ViewModel() {
     val response: LiveData<WeatherResponse>
         get() = _response
 
-    var place = MutableLiveData<String>()
+    val place = MutableLiveData<String>()
+
+    private val _status = MutableLiveData<WeatherApiStatus>()
+
+    val status: LiveData<WeatherApiStatus>
+        get() = _status
 
     init {
         getCurrentWeather()
@@ -22,15 +28,17 @@ class CurrentWeatherViewModel() : ViewModel() {
 
 
     fun getCurrentWeather() {
-        place.value?.let {
-            viewModelScope.launch {
-                try {
-                    val result =
-                        WeatherApiService().getCurrentWeather(place.value.toString(), "metric")
-                    _response.value = result
-                } catch (e: Exception) {
-                    Log.i("Failure: ", e.printStackTrace().toString())
-                }
+        viewModelScope.launch {
+            _status.value = WeatherApiStatus.LOADING
+            try {
+                val result =
+                    WeatherApiService()
+                        .getCurrentWeather(place.value.toString(), "metric")
+                _response.value = result
+                _status.value = WeatherApiStatus.DONE
+            } catch (e: Exception) {
+                Log.i("Failure: ", e.printStackTrace().toString())
+                _status.value = WeatherApiStatus.ERROR
             }
         }
 

@@ -33,7 +33,7 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
     private lateinit var geocoder: Geocoder
     private val PERMISSION_ID = 44
 
-    //TODO: button do lokalizacji, design, ładowanie
+    //TODO: button do lokalizacji, design
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,6 +50,11 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
 
         viewModel.place.observe(viewLifecycleOwner, Observer {
             viewModel.getCurrentWeather()
+        })
+
+        viewModel.status.observe(viewLifecycleOwner, Observer { status ->
+            if (status == WeatherApiStatus.DONE) binding.llDescription.visibility = View.VISIBLE
+            else binding.llDescription.visibility = View.GONE
         })
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())

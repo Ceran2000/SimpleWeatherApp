@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -13,13 +14,20 @@
         android:layout_height="match_parent"
         tools:context=".ui.CurrentWeatherFragment">
 
+        <ImageView
+            android:id="@+id/status_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:weatherApiStatus="@{viewModel.status}" />
+
         <LinearLayout
             android:id="@+id/ll_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="8dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_city"
@@ -88,7 +96,7 @@
             android:layout_margin="16dp"
             android:clickable="true"
             android:elevation="5dp"
-            android:src="@android:drawable/ic_menu_share"
+            android:src="@drawable/baseline_search_black_20"
             android:focusable="true"
             android:contentDescription="@string/find_place" />
 
