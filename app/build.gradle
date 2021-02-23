@@ -80,4 +80,7 @@ dependencies {
 
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$version_room"
+
+    //Floating Action Button
+    implementation 'com.github.clans:fab:1.6.4'
 }

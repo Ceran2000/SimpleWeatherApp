@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">SimpleWeatherApp</string>
     <string name="find_place">Find place</string>
+    <string name="expand">Expand</string>
+    <string name="get_device_location">Get device location</string>
 </resources>

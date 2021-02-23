@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -32,9 +33,7 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     private val PERMISSION_ID = 44
-
-    //TODO: button do lokalizacji, design
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -44,15 +43,21 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.findPlaceFab.setOnClickListener {
+        binding.fabFindPlace.setOnClickListener {
             openFindPlaceDialog()
+            binding.fabMenu.close(true)
         }
 
-        viewModel.place.observe(viewLifecycleOwner, Observer {
+        binding.fabGetDeviceLocation.setOnClickListener {
+            getLastLocation()
+            binding.fabMenu.close(true)
+        }
+
+        viewModel.place.observe(viewLifecycleOwner, {
             viewModel.getCurrentWeather()
         })
 
-        viewModel.status.observe(viewLifecycleOwner, Observer { status ->
+        viewModel.status.observe(viewLifecycleOwner, { status ->
             if (status == WeatherApiStatus.DONE) binding.llDescription.visibility = View.VISIBLE
             else binding.llDescription.visibility = View.GONE
         })
@@ -61,7 +66,6 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
         getLastLocation()
 
         geocoder = Geocoder(context)
-
 
         return binding.root
     }

@@ -88,17 +88,29 @@
 
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/findPlaceFab"
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/fab_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:elevation="5dp"
-            android:src="@drawable/baseline_search_black_20"
-            android:focusable="true"
-            android:contentDescription="@string/find_place" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            android:elevation="16dp">
+
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_find_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_size="normal"
+                android:src="@drawable/ic_baseline_search"/>
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/fab_get_device_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_size="normal"
+                android:src="@drawable/ic_baseline_home_24"/>
+
+        </com.github.clans.fab.FloatingActionMenu>
 
     </FrameLayout>
 
