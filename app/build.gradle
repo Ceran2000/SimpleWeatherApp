@@ -83,4 +83,10 @@ dependencies {
 
     //Floating Action Button
     implementation 'com.github.clans:fab:1.6.4'
+
+    // Room dependency
+    def room_version = "2.1.0-alpha06"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
 }

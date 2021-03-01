@@ -5,7 +5,7 @@ import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.example.simpleweatherapp.ui.WeatherApiStatus
+
 
 @BindingAdapter("imageIcon")
 fun bindImage(imgView: ImageView, imgIcon: String?) {
@@ -18,6 +18,7 @@ fun bindImage(imgView: ImageView, imgIcon: String?) {
     }
 }
 
+/*
 @BindingAdapter("weatherApiStatus")
 fun bindStatus(statusImageView: ImageView, status: WeatherApiStatus?){
     when(status){
@@ -33,4 +34,4 @@ fun bindStatus(statusImageView: ImageView, status: WeatherApiStatus?){
             statusImageView.visibility = View.GONE
         }
     }
-}
+}*/

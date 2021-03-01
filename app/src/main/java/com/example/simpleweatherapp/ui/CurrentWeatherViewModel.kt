@@ -1,46 +1,35 @@
 package com.example.simpleweatherapp.ui
 
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.simpleweatherapp.models.WeatherResponse
+import com.example.simpleweatherapp.database.getDatabase
+import com.example.simpleweatherapp.network.models.WeatherResponse
 import com.example.simpleweatherapp.network.WeatherApiService
+import com.example.simpleweatherapp.repository.WeatherRepository
 import kotlinx.coroutines.launch
 
-enum class WeatherApiStatus { LOADING, ERROR, DONE }
 
-class CurrentWeatherViewModel() : ViewModel() {
-
-    private val _response = MutableLiveData<WeatherResponse>()
-    val response: LiveData<WeatherResponse>
-        get() = _response
+class CurrentWeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     val place = MutableLiveData<String>()
 
-    private val _status = MutableLiveData<WeatherApiStatus>()
+    private val weatherRepository = WeatherRepository(getDatabase(application))
 
-    val status: LiveData<WeatherApiStatus>
-        get() = _status
+    val weather = weatherRepository.weather
 
     init {
-        getCurrentWeather()
+        refreshDataFromRepository()
     }
 
-
-    fun getCurrentWeather() {
+    fun refreshDataFromRepository(){
         viewModelScope.launch {
-            _status.value = WeatherApiStatus.LOADING
-            try {
-                val result =
-                    WeatherApiService()
-                        .getCurrentWeather(place.value.toString(), "metric")
-                _response.value = result
-                _status.value = WeatherApiStatus.DONE
-            } catch (e: Exception) {
-                Log.i("Failure: ", e.printStackTrace().toString())
-                _status.value = WeatherApiStatus.ERROR
+            try{
+                weatherRepository.refreshWeather(place.value.toString())
+            } catch (e: Exception){
+                Log.i("FAILURE: ", e.printStackTrace().toString())
             }
         }
-
     }
 }

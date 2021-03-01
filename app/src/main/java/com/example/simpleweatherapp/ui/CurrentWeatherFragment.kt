@@ -29,7 +29,13 @@ import com.google.android.gms.location.*
 
 class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceListener {
 
-    private lateinit var viewModel: CurrentWeatherViewModel
+    private val viewModel : CurrentWeatherViewModel by lazy{
+        val activity = requireNotNull(this.activity)
+        ViewModelProvider(this,
+            CurrentWeatherViewModelFactory(activity.application))
+            .get(CurrentWeatherViewModel::class.java)
+    }
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     private val PERMISSION_ID = 44
@@ -37,8 +43,9 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val binding = DataBindingUtil.inflate<CurrentWeatherFragmentBinding>(inflater, R.layout.current_weather_fragment, container, false)
-        viewModel = ViewModelProvider(this).get(CurrentWeatherViewModel::class.java)
+        val binding = DataBindingUtil.inflate<CurrentWeatherFragmentBinding>(
+            inflater, R.layout.current_weather_fragment, container, false
+        )
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -54,12 +61,8 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
         }
 
         viewModel.place.observe(viewLifecycleOwner, {
-            viewModel.getCurrentWeather()
-        })
-
-        viewModel.status.observe(viewLifecycleOwner, { status ->
-            if (status == WeatherApiStatus.DONE) binding.llDescription.visibility = View.VISIBLE
-            else binding.llDescription.visibility = View.GONE
+            viewModel.refreshDataFromRepository()
+            binding.llDescription.visibility = View.VISIBLE
         })
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
