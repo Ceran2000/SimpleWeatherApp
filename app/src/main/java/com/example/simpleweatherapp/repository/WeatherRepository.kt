@@ -15,13 +15,13 @@ import kotlinx.coroutines.withContext
 class WeatherRepository(private val database: WeatherDatabase) {
 
     var weather: LiveData<CurrentWeather> = Transformations.map(database.weatherDao.getWeather()){
-        it.asDomainModel()
+        it?.asDomainModel()
     }
 
     suspend fun refreshWeather(city: String){
         withContext(Dispatchers.IO){
-            val weather = WeatherNetwork.service.getCurrentWeather(city, "metric")
-            database.weatherDao.insert(weather.asDatabaseModel())
+            val weatherResponse = WeatherNetwork.service.getCurrentWeather(city, "metric")
+            database.weatherDao.insert(weatherResponse.asDatabaseModel())
         }
     }
 }

@@ -15,7 +15,7 @@ interface WeatherDao{
     fun insert(weather: DatabaseWeather)
 }
 
-@Database(entities = [DatabaseWeather::class], version = 1)
+@Database(entities = [DatabaseWeather::class], version = 2)
 abstract class WeatherDatabase: RoomDatabase(){
     abstract val weatherDao: WeatherDao
 }
@@ -26,7 +26,9 @@ fun getDatabase(context: Context): WeatherDatabase{
     synchronized(WeatherDatabase::class.java){
         if (!::INSTANCE.isInitialized){
             INSTANCE = Room.databaseBuilder(context.applicationContext,
-            WeatherDatabase::class.java, "weather_db").build()
+            WeatherDatabase::class.java, "weather_db")
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
     return INSTANCE

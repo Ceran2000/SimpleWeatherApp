@@ -29,19 +29,22 @@ import com.google.android.gms.location.*
 
 class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceListener {
 
-    private val viewModel : CurrentWeatherViewModel by lazy{
+    private val viewModel: CurrentWeatherViewModel by lazy {
         val activity = requireNotNull(this.activity)
-        ViewModelProvider(this,
-            CurrentWeatherViewModelFactory(activity.application))
+        ViewModelProvider(
+            this,
+            CurrentWeatherViewModelFactory(activity.application)
+        )
             .get(CurrentWeatherViewModel::class.java)
     }
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
     private val PERMISSION_ID = 44
-    
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
 
         val binding = DataBindingUtil.inflate<CurrentWeatherFragmentBinding>(
             inflater, R.layout.current_weather_fragment, container, false
@@ -62,7 +65,17 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
 
         viewModel.place.observe(viewLifecycleOwner, {
             viewModel.refreshDataFromRepository()
-            binding.llDescription.visibility = View.VISIBLE
+        })
+
+        viewModel.weather.observe(viewLifecycleOwner, { weather->
+            weather?.let { binding.llDescription.visibility = View.VISIBLE }
+        })
+
+        viewModel.eventNetworkError.observe(viewLifecycleOwner, { isNetworkError ->
+            if (isNetworkError) {
+                Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+                viewModel.onNetworkErrorShown()
+            }
         })
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -115,7 +128,8 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
     }
 
     private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
@@ -149,12 +163,19 @@ class CurrentWeatherFragment : Fragment(), FindPlaceDialogFragment.FindPlaceList
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
             PERMISSION_ID
         )
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == PERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLastLocation()

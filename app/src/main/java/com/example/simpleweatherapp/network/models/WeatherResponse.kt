@@ -23,6 +23,7 @@ data class WeatherResponse(
 fun WeatherResponse.asDatabaseModel(): DatabaseWeather {
     return DatabaseWeather(
         name = this.name,
+        country = this.sys.country,
         lon = this.coord.lon,
         lat = this.coord.lat,
         description = this.weather[0].description,
